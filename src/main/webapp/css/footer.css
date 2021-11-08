@@ -1,0 +1,52 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+.footer{
+    background-color: rgba(77, 77, 77, .7);
+    position: static;
+    width: 100%;
+    height: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    clear: both;
+}
+
+.footer__addr {
+    float: right;
+    margin-left: 2ex;
+    margin-bottom: 2em;
+}
+
+.footer__logo {
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    text-transform: lowercase;
+    font-size: 1.5rem;
+}
+
+@media screen and (min-width: 24.375em) {
+    .legal {
+        float: right;
+        margin-left: auto;
+    }
+}
+
+@media screen and (min-width: 40.375em) {
+    .footer__nav > * {
+        flex: 1;
+    }
+
+    .nav__item--extra {
+        flex-grow: 2;
+    }
+
+    .footer__addr {
+        flex: 1 0px;
+    }
+
+    .footer__nav {
+        flex: 2 0px;
+        margin-left: 2ex;
+    }
+}

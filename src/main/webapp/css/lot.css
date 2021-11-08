@@ -1,0 +1,127 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 50%;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+th{
+    background-color: #333333;
+}
+
+tr:nth-child(even) {
+    background-color: #585858;
+}
+
+.time{
+    color:#ffda23;
+    font-size: 30px;
+}
+
+.content_container{
+    background-color:green;
+    text-align:center;
+    opacity:0.8;
+    padding:5px;
+}
+#lot_name{
+    color:aqua;
+    font-size:25px
+}
+#lot_cost{
+    color:chartreuse;
+    font-size:35px;
+}
+
+/* The grid: Four equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 25%;
+    padding: 10px;
+}
+
+/* Style the images inside the grid */
+.column img {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.column img:hover {
+    opacity: 1;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.main_block {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.content_container {
+    float: bottom;
+}
+
+/* The expanding image container */
+.container {
+    position: relative;
+    display: none;
+}
+
+/* Expanding image text */
+#imgtext {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    font-size: 20px;
+}
+
+/* Closable button inside the expanded image */
+.closebtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: black;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.submitbtn{
+    color: black;
+    float: right;
+    font-size: 25px;
+}
+
+.container {
+    position:relative;
+}
+.img-magnifier-glass {
+    position: absolute;
+    border: 3px solid #000;
+    border-radius: 50%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    width: 100px;
+    height: 100px;
+}

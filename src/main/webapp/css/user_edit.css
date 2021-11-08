@@ -1,0 +1,26 @@
+img {
+    margin-top: 15px;
+    width: 240px;
+    height: 240px;
+}
+
+body {
+    background: #000 url(../img/background.jpg); /* Фоновый цвет и фоновый рисунок*/
+    color: #fff; /*Цвет текста на странице*/
+    background-attachment: fixed; /* Фон страницы фиксируется */
+    background-repeat: repeat-x; /* Изображение повторяется по горизонтали */
+}
+
+input[type="submit"]{
+    color:blue;
+    background-color:aqua;
+}
+
+.container {
+    background-color: blanchedalmond;
+    alignment: center;
+    margin-top: 5%;
+}
+.message{
+    text-align:center;
+}
