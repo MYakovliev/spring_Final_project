@@ -4,6 +4,7 @@ import by.bntu.fitr.springtry.entity.Bid;
 import by.bntu.fitr.springtry.entity.Lot;
 import by.bntu.fitr.springtry.entity.Status;
 import by.bntu.fitr.springtry.entity.User;
+import by.bntu.fitr.springtry.repository.BidRepository;
 import by.bntu.fitr.springtry.repository.LotRepository;
 import by.bntu.fitr.springtry.service.LotService;
 import by.bntu.fitr.springtry.service.ServiceException;
@@ -28,7 +29,8 @@ public class LotServiceImpl implements LotService {
     private static final Logger logger = LogManager.getLogger();
     @Autowired
     private LotRepository lotRepository;
-
+    @Autowired
+    private BidRepository bidRepository;
 
     @Override
     public Lot createNewLot(String name, String description, String startBid, Timestamp startTime, Timestamp finishTime,
@@ -45,46 +47,68 @@ public class LotServiceImpl implements LotService {
 
         Lot lot = new Lot(0, name, description, startTime, finishTime, startBidDecimal, seller, images);
         lot = lotRepository.save(lot);
-
         return lot;
     }
 
     @Override
     public Lot findLotById(long id) {
-        return lotRepository.findById(id).orElseThrow(() -> new ServiceException(ErrorMessage.UNKNOWN_LOT));
+        Lot lot = lotRepository.findById(id).orElseThrow(() -> new ServiceException(ErrorMessage.UNKNOWN_LOT));
+        List<Bid> bids = bidRepository.findByIdLot(lot.getId());
+        lot.setBidHistory(bids);
+        return lot;
     }
 
     @Override
     public Page<Lot> findLotByName(String name, int pageNumber, int amountPerPage) {
-        return lotRepository.findByNameLike(ANY_SQL_SYMBOL + name + ANY_SQL_SYMBOL,
+        Page<Lot> lotPage = lotRepository.findByNameLike(ANY_SQL_SYMBOL + name + ANY_SQL_SYMBOL,
                 PageRequest.of(pageNumber - 1, amountPerPage));
+        lotPage.forEach(lot -> {
+            lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
+        });
+        return lotPage;
     }
 
     @Override
     public List<Lot> findLotByBuyerId(User buyer, int pageNumber, int amountPerPage) {
-        return lotRepository.findByBuyer(buyer, PageRequest.of(pageNumber-1, amountPerPage));
+        List<Lot> lots = lotRepository.findByBuyer(buyer, PageRequest.of(pageNumber - 1, amountPerPage));
+        lots.forEach(lot -> {
+            lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
+        });
+        return lots;
     }
 
     @Override
     public List<Lot> findLotBySellerId(User seller, int pageNumber, int amountPerPage) {
-        return lotRepository.findBySeller(seller, PageRequest.of(pageNumber-1, amountPerPage));
+        List<Lot> lots = lotRepository.findBySeller(seller, PageRequest.of(pageNumber - 1, amountPerPage));
+        lots.forEach(lot -> {
+            lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
+        });
+        return lots;
     }
 
     @Override
     public List<Lot> findActive(int pageNumber, int amountPerPage) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        return lotRepository.findByFinishTimeAfter(now, PageRequest.of(pageNumber-1, amountPerPage));
+        List<Lot> lots = lotRepository.findByFinishTimeAfter(now, PageRequest.of(pageNumber - 1, amountPerPage));
+        lots.forEach(lot -> {
+            lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
+        });
+        return lots;
     }
 
     @Override
     public List<Lot> findAll(int pageNumber, int amountPerPage) {
-       return lotRepository.findAll(PageRequest.of(pageNumber-1, amountPerPage)).getContent();
+        List<Lot> lots = lotRepository.findAll(PageRequest.of(pageNumber - 1, amountPerPage)).getContent();
+        lots.forEach(lot -> {
+            lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
+        });
+        return lots;
     }
 
     @Override
     public boolean isLotSubmitted(long lotId) {
-        Lot lot = lotRepository.findById(lotId).orElseThrow(() -> new ServiceException(ErrorMessage.UNKNOWN_LOT));
-        List<Bid> bidHistory = lot.getBidHistory();
+        lotRepository.findById(lotId).orElseThrow(() -> new ServiceException(ErrorMessage.UNKNOWN_LOT));
+        List<Bid> bidHistory = bidRepository.findByIdLot(lotId);
         bidHistory.removeIf(bid -> bid.getStatus()!= Status.WON);
         Optional<Bid> submittedWinner = bidHistory.stream().findAny();
         return submittedWinner.isPresent();

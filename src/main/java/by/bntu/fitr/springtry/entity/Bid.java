@@ -14,8 +14,10 @@ public class Bid {
     @JoinColumn(name = "id_buyer")
     private User buyer;
     private BigDecimal bid;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.ORDINAL)
     private Status status;
+    @Column(name = "id_lot")
+    private long idLot;
 
     public Bid() {
     }
@@ -26,6 +28,8 @@ public class Bid {
         this.bid = bid;
         this.status = status;
     }
+
+
 
     public long getId() {
         return id;

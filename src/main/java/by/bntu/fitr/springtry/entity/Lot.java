@@ -28,10 +28,9 @@ public class Lot {
     @ManyToOne
     @JoinColumn(name = "seller")
     private User seller;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_lot")
+    @Transient
     private List<Bid> bidHistory;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "lot_id")
     private List<LotImage> images;
 
