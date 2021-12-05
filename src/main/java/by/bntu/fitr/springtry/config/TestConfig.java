@@ -36,9 +36,4 @@ public class TestConfig {
         factory.setPackagesToScan(PACKAGES_TO_SCAN);
         return factory;
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(12);
-    }
 }

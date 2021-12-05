@@ -1,13 +1,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<c:set var="page" value="${'/jsp/admin.jsp'}" scope="session"/>
 <html>
 <head>
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
-    <link rel="stylesheet" href="<c:url value="./css/admin.css"/>" type="text/css"/>
-    <script src="<c:url value="./js/open_tab.js"/>"></script>
+    <link rel="stylesheet" href="<c:url value="/css/admin.css"/>" type="text/css"/>
+    <script src="<c:url value="/js/open_tab.js"/>"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
           crossorigin="anonymous">
@@ -21,8 +20,8 @@
     <button class="tablinks" onclick="openTab(event, 'Lots')"><fmt:message key="admin.lots"/></button>
 </div>
 <div id="Users" class="tabcontent">
-    <form action="${pageContext.request.contextPath}/controller?command=search_user_by_name" method="post">
-        <input name="search" type="text" placeholder="<fmt:message key="search"/>" value="${search}"/>
+    <form action="/admin?" method="post">
+        <input name="search_user" type="text" placeholder="<fmt:message key="search"/>" value="${search_user}"/>
         <button type="submit">&hookleftarrow;</button>
     </form>
     <table>
@@ -37,7 +36,7 @@
         <c:forEach var="user" items="${requestScope.user_list}">
             <tr>
                 <td>
-                    <a href="${pageContext.request.contextPath}/controller?command=to_profile&user_id=${user.id}">${user.id}</a>
+                    <a href="/user/${user.id}">${user.id}</a>
                 </td>
                 <td>${user.name}</td>
                 <td>${user.mail}</td>
@@ -47,11 +46,11 @@
                     <c:if test="${user.id ne sessionScope.user.id}">
                         <c:choose>
                             <c:when test="${user.banned}"><a
-                                    href="${pageContext.request.contextPath}/controller?command=unban_user&user_id=${user.id}&user_active_page=${user_active_page}&lot_active_page=${lot_active_page}"><fmt:message
+                                    href="/unban/${user.id}?user_active_page=${user_active_page}&lot_active_page=${lot_active_page}"><fmt:message
                                     key="admin.unban"/></a>
                             </c:when>
                             <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/controller?command=ban_user&user_id=${user.id}&user_active_page=${user_active_page}&lot_active_page=${lot_active_page}"><fmt:message
+                                <a href="/ban/${user.id}?user_active_page=${user_active_page}&lot_active_page=${lot_active_page}"><fmt:message
                                         key="admin.ban"/></a>
                             </c:otherwise>
                         </c:choose>
@@ -65,7 +64,7 @@
             <ul class="pagination">
                 <c:if test="${user_active_page != 1}">
                     <li class="page-item"><a class="page-link"
-                                             href="${pageContext.request.contextPath}/controller?command=${user_pagingcommand}&user_page=${user_active_page-1}"><fmt:message
+                                             href="/main?user_page=${user_active_page-1}"><fmt:message
                             key="paging.previous"/></a>
                     </li>
                 </c:if>

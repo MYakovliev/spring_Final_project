@@ -9,7 +9,7 @@
     <uri>/WEB-INF/tld/custom.tld</uri>
     <tag>
         <name>access</name>
-        <tag-class>com.epam.web.tag.RoleAccessTag</tag-class>
+        <tag-class>by.bntu.fitr.springtry.tag.RoleAccessTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>role</name>

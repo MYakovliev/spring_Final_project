@@ -13,7 +13,7 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="ban.title"/></title>
-    <link href="<c:url value="./css/ban.css"/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value="/css/ban.css"/>" type="text/css" rel="stylesheet"/>
 </head>
 <body>
 <h3><fmt:message key="ban.sorry"/></h3>

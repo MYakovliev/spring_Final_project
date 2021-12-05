@@ -13,10 +13,10 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="404.title"/></title>
-    <link href="<c:url value="./css/ban.css"/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value="/css/ban.css"/>" type="text/css" rel="stylesheet"/>
 </head>
 <body>
 <h3><fmt:message key="404.sorry"/></h3>
-<a href="${pageContext.request.contextPath}/controller?command=logout"><fmt:message key="404.to_main"/></a>
+<a href="/logout"><fmt:message key="404.to_main"/></a>
 </body>
 </html>

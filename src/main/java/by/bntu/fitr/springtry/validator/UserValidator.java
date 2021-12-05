@@ -10,9 +10,9 @@ public class UserValidator {
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH=35;
 
-    private static final Pattern MAIL_PATTERN = Pattern.compile("[^$@!]{4,20}@\\w+\\.\\w+");
-    private static final Pattern LOGIN_PATTERN = Pattern.compile("[\\wА-Яа-я0-9]{4,35}");
-    private static final Pattern NAME_PATTERN = Pattern.compile("[\\wА-Яа-я]{1,35}");
+    private static final Pattern MAIL_PATTERN = Pattern.compile("[^$@!]{4,20}@[A-Za-z]{2,9}\\.[A-Za-z]{2,9}");
+    private static final Pattern LOGIN_PATTERN = Pattern.compile("[\\wА-Яа-я]{4,35}");
+    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-zА-Яа-я]{1,35}");
     private static final Pattern BID_PATTERN = Pattern.compile("[0-9]{1,10}(\\.[0-9]{0,2})?");
 
     public static boolean isValidName(String name) {

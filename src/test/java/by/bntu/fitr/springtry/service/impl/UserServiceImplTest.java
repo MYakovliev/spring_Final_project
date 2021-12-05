@@ -65,9 +65,9 @@ class UserServiceImplTest {
     @Test
     @DirtiesContext
     void registerPositive() {
-        User expected = new User(3, "name3", "mail3@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
+        User expected = new User(3, "name", "mail3@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
                 null, false, "login3");
-        User actual = userService.register("name3", "mail3@mail.ma", "login3", "password", UserRole.BUYER);
+        User actual = userService.register("name", "mail3@mail.ma", "login3", "password", UserRole.BUYER);
         assertEquals(expected, actual);
     }
 

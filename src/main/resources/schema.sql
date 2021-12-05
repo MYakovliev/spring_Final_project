@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(1000) NOT NULL,
     balance DECIMAL(10,2) NULL DEFAULT '0.00',
     role INT NOT NULL,
-    avatar VARCHAR(70) NULL DEFAULT NULL,
+    avatar VARCHAR(70) NULL DEFAULT '/img/default_image.png',
     isBanned TINYINT NULL DEFAULT 0,
     PRIMARY KEY (idusers),
     CONSTRAINT role
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS lots (
 );
 
 CREATE TABLE IF NOT EXISTS status (
-    idstatus INT NOT NULL AUTO_INCREMENT,
+    idstatus INT NOT NULL,
     status VARCHAR(45) NOT NULL,
     PRIMARY KEY (idstatus)
 );

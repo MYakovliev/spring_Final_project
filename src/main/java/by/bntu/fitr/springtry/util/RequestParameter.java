@@ -33,6 +33,7 @@ public class RequestParameter {
     public static final String ERROR = "error";
     public static final String OLD_PASSWORD = "old_password";
     public static final String SEARCH = "search";
+    public static final String USER_SEARCH = "user_search";
     public static final String SUBMITTED = "submitted";
 
     private RequestParameter(){}

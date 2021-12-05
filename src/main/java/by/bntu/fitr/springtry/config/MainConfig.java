@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.sql.DataSource;
 
 @Configuration
@@ -18,10 +15,6 @@ import javax.sql.DataSource;
 public class MainConfig {
     private static final String PACKAGES_TO_SCAN = "by.bntu.fitr.springtry";
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(12);
-    }
 
     @Bean
     public LocalSessionFactoryBean entityManagerFactory(DataSource dataSource){

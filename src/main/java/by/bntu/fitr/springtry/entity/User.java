@@ -4,6 +4,7 @@ package by.bntu.fitr.springtry.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import static javax.persistence.EnumType.ORDINAL;
@@ -15,7 +16,7 @@ import static javax.persistence.EnumType.ORDINAL;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusers")

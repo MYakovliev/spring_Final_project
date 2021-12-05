@@ -13,7 +13,7 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="registration.title"/></title>
-    <link href="<c:url value="./css/registration.css"/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value="/css/registration.css"/>" type="text/css" rel="stylesheet"/>
 
 </head>
 <body>

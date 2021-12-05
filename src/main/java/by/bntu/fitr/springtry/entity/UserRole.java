@@ -1,6 +1,5 @@
 package by.bntu.fitr.springtry.entity;
 
-
 /**
  * Enum stores user roles
  *

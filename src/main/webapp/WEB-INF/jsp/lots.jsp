@@ -8,7 +8,7 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="lots.title"/></title>
-    <link href="<c:url value="./css/lots.css"/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value="/css/lots.css"/>" type="text/css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
           crossorigin="anonymous"/>
@@ -70,7 +70,7 @@
         </ul>
     </c:if>
 </nav>
-<script src="<c:url value="./js/time_counter.js"/>"></script>
+<script src="<c:url value="/js/time_counter.js"/>"></script>
 <jsp:include page="support/footer.jsp"/>
 </body>
 </html>

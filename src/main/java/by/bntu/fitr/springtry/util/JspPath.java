@@ -5,17 +5,18 @@ package by.bntu.fitr.springtry.util;
  */
 public class  JspPath {
 
-    public static final String LOT_EDIT = "/jsp/lot_edit.jsp";
-    public static final String LOGIN = "/jsp/login.jsp";
-    public static final String REGISTRATION = "/jsp/registration.jsp";
-    public static final String LOTS = "/jsp/lots.jsp";
-    public static final String LOT = "/jsp/lot.jsp";
-    public static final String BAN = "/jsp/ban.jsp";
-    public static final String ADMIN = "/jsp/admin.jsp";
-    public static final String PROFILE = "/jsp/profile.jsp";
-    public static final String USER_EDIT = "/jsp/user_edit.jsp";
-    public static final String PAYMENT = "/jsp/payment.jsp";
-    public static final String INDEX = "/index.jsp";
+    public static final String LOT_EDIT = "lot_edit";
+    public static final String LOGIN = "login";
+    public static final String REGISTRATION = "registration";
+    public static final String LOTS = "lots";
+    public static final String LOT = "lot";
+    public static final String BAN = "ban";
+    public static final String ADMIN = "admin";
+    public static final String PROFILE = "profile";
+    public static final String USER_EDIT = "user_edit";
+    public static final String PAYMENT = "payment";
+    public static final String INDEX = "index";
 
     private JspPath(){}
+
 }

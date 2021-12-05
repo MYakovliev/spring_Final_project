@@ -1,6 +1,7 @@
 package by.bntu.fitr.springtry.service.impl;
 
 import by.bntu.fitr.springtry.entity.*;
+import by.bntu.fitr.springtry.repository.BidRepository;
 import by.bntu.fitr.springtry.repository.LotRepository;
 import by.bntu.fitr.springtry.repository.UserRepository;
 import by.bntu.fitr.springtry.service.ServiceException;
@@ -28,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private LotRepository lotRepository;
+    @Autowired
+    private BidRepository bidRepository;
 
     @Override
     public User login(String login, String password) throws ServiceException {
@@ -154,7 +157,7 @@ public class UserServiceImpl implements UserService {
         if (!(buyer.getBalance().compareTo(bid) > 0)) {
             throw new ServiceException(ErrorMessage.NOT_ENOUGH_MONEY);
         }
-        List<Bid> bidHistory = lot.getBidHistory();
+        List<Bid> bidHistory = bidRepository.findByIdLot(lot.getId());
         for (Bid bid1 : bidHistory) {
             if (bid1.getStatus() == Status.WINING) {
                 bid1.setStatus(Status.LOSE);
@@ -165,8 +168,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         Bid newBid = new Bid(0, buyer, bid, Status.WINING);
-        bidHistory.add(newBid);
-        return lotRepository.save(lot);
+        final Bid saved = bidRepository.save(newBid);
+        bidHistory.add(saved);
+        final Lot savedLot = lotRepository.save(lot);
+        savedLot.setBidHistory(bidHistory);
+        return savedLot;
     }
 
 

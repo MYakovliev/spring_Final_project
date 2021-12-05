@@ -16,41 +16,41 @@
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="header.title"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="<c:url value="./css/header.css"/>" type="text/css"/>
-    <script src="<c:url value="./js/header.js"/>"></script>
+    <link rel="stylesheet" href="<c:url value="/css/header.css"/>" type="text/css"/>
+    <script src="<c:url value="/js/header.js"/>"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body>
 <div class="topnav" id="topnavElement">
-    <a class="active" href="${pageContext.request.contextPath}/controller?command=to_lots"><fmt:message
+    <a class="active" href="/main"><fmt:message
             key="header.home"/></a>
     <a href="#footer"><fmt:message key="header.contact"/></a>
-    <tag:access role="admin"><a href="${pageContext.request.contextPath}/controller?command=to_admin"><fmt:message
+    <tag:access role="admin"><a href="/admin"><fmt:message
             key="header.admin_page"/></a></tag:access>
-    <tag:access role="seller"><a href="${pageContext.request.contextPath}/controller?command=to_seller_lots"><fmt:message
+    <tag:access role="seller"><a href="/main?seller_id=${sessionScope.user.id}"><fmt:message
             key="header.my_lots"/></a></tag:access>
-    <tag:access role="buyer"><a href="${pageContext.request.contextPath}/controller?command=to_buyer_lots"><fmt:message
+    <tag:access role="buyer"><a href="/main?buyer_id=${sessionScope.user.id}"><fmt:message
             key="header.my_lots"/></a></tag:access>
     <div class="topnav-right">
         <div class="buttons">
             <c:choose>
                 <c:when test="${sessionScope.user == null}">
-                    <a href="${pageContext.request.contextPath}/controller?command=to_login">
+                    <a href="/login">
                         <fmt:message key="header.sign_in"/>
                     </a>
-                    <a href="${pageContext.request.contextPath}/controller?command=to_registration">
+                    <a href="/signup">
                         <fmt:message key="header.signup"/>
                     </a>
                 </c:when>
                 <c:otherwise>
-                <a href="${pageContext.request.contextPath}/controller?command=to_profile&user_id=${sessionScope.user.id}">
+                <a href="/user/${sessionScope.user.id}">
                         ${sessionScope.user.name}
-                    <img src="${pageContext.request.contextPath}/${sessionScope.user.avatar}" class="avatar"
+                    <img src="${sessionScope.user.avatar}" class="avatar"
                          alt="Avatar"/>
                 </a>
 
-                    <a href="${pageContext.request.contextPath}/controller?command=to_payment">${sessionScope.user.balance}&dollar;</a>
-                    <a href="${pageContext.request.contextPath}/controller?command=logout">
+                    <a href="/pay">${sessionScope.user.balance}&dollar;</a>
+                    <a href="/logout">
                         <fmt:message key="header.sign_out"/>
                     </a>
                 </c:otherwise>
@@ -69,10 +69,10 @@
                     <h1><fmt:message key="header.change_language"/></h1>
                     <a href="#" class="modal__close">&times;</a>
                     <div class="languages">
-                        <a id="en" href="${pageContext.request.contextPath}/controller?command=change_language&lang=en">
+                        <a id="en" href="/change_language?lang=en">
                             <fmt:message key="ENGLISH"/>
                         </a>
-                        <a id="ru" href="${pageContext.request.contextPath}/controller?command=change_language&lang=ru">
+                        <a id="ru" href="/change_language?lang=ru">
                             <fmt:message key="RUSSIAN"/>
                         </a>
                     </div>

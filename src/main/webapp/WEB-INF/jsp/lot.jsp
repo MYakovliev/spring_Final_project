@@ -14,7 +14,7 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="lot.title"/></title>
-    <link href="<c:url value="./css/lot.css"/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value="/css/lot.css"/>" type="text/css" rel="stylesheet"/>
 </head>
 <body>
 <jsp:include page="support/header.jsp"/>
@@ -79,8 +79,8 @@
         </c:forEach>
     </table>
 </c:if>
-<script src="<c:url value="./js/time_counter.js"/>"></script>
-<script src="<c:url value="./js/magnifier.js"/>"></script>
-<script src="<c:url value="./js/show_picture.js"/>"></script>
+<script src="<c:url value="/js/time_counter.js"/>"></script>
+<script src="<c:url value="/js/magnifier.js"/>"></script>
+<script src="<c:url value="/js/show_picture.js"/>"></script>
 </body>
 </html>
