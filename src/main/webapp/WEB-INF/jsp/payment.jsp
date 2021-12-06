@@ -1,4 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: nicki
@@ -17,8 +19,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <link href="https://bootstraptema.ru/snippets/form/2017/styles.css" rel="stylesheet">
-<form action="${pageContext.request.contextPath}/controller" method="post">
+<form action="/do_pay" method="post">
     <input type="hidden" name="command" value="add_to_balance">
+    <c:if test="${error ne null}">
+        <p class="error"><fmt:message key="${error}"/></p>
+    </c:if>
     <div class="container">
         <div class="row">
 

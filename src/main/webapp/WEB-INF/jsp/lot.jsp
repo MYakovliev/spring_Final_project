@@ -21,20 +21,20 @@
 <div class="content_container">
     <jsp:useBean id="today" class="java.util.Date"/>
 
-    <c:if test="${lot.finishTime.before(today) and lot.buyerId ne 0}">
+    <c:if test="${!submitted}">
         <tag:access role="admin">
-        <a class="submitbtn" href="${pageContext.request.contextPath}/controller?command=submit_winner&lot_id=${lot.id}">&#10004;</a>
+        <a class="submitbtn" href="/lot/${lot.id}/submit">&#10004;</a>
         </tag:access>
     </c:if>
-    <a href="${pageContext.request.contextPath}/controller?command=to_profile&user_id=${lot.sellerId}">
+    <a href="/user/${lot.sellerId}">
         <fmt:message key="lot.to_seller"/>
     </a>
     <c:if test="${error ne null}">
         <p class="error"><fmt:message key="${error}"/></p>
     </c:if>
-    <form action="${pageContext.request.contextPath}/controller" method="post">
+    <form action="/make_bid" method="post">
         <input type="hidden" name="command" value="make_bid"/>
-        <input type="hidden" name="lot_id" value="${lot.id}">
+        <input type="hidden" name="lotId" value="${lot.id}">
         <span id="lot_name">${lot.name}</span><br/>
         ${lot.description}<br/><br/><br/>
         <span id="lot_cost">${lot.currentCost}&dollar;</span><br/>
@@ -43,7 +43,7 @@
         <input type="submit" name="btn" value="<fmt:message key="lot.make_bid"/>"/>
     </form>
     <c:if test="${lot.buyerId ne 0}">
-        <a href="${pageContext.request.contextPath}/controller?command=to_profile&user_id=${lot.buyerId}">
+        <a href="/user/${lot.buyerId}">
             <fmt:message key="lot.to_buyer"/>
         </a>
     </c:if>

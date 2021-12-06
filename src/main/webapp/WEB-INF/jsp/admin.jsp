@@ -20,7 +20,7 @@
     <button class="tablinks" onclick="openTab(event, 'Lots')"><fmt:message key="admin.lots"/></button>
 </div>
 <div id="Users" class="tabcontent">
-    <form action="/admin?" method="post">
+    <form action="/admin" method="get">
         <input name="search_user" type="text" placeholder="<fmt:message key="search"/>" value="${search_user}"/>
         <button type="submit">&hookleftarrow;</button>
     </form>
@@ -64,7 +64,7 @@
             <ul class="pagination">
                 <c:if test="${user_active_page != 1}">
                     <li class="page-item"><a class="page-link"
-                                             href="/main?user_page=${user_active_page-1}"><fmt:message
+                                             href="/admin?user_active_page=${user_active_page-1}&lot_active_page=${lot_active_page}"><fmt:message
                             key="paging.previous"/></a>
                     </li>
                 </c:if>
@@ -78,7 +78,7 @@
                         </c:when>
                         <c:otherwise>
                             <li class="page-item"><a class="page-link"
-                                                     href="${pageContext.request.contextPath}/controller?command=${user_paging_command}&user_page=${i}">${i}</a>
+                                                     href="admin?user_active_page=${i}&lot_active_page=${lot_active_page}">${i}</a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -86,7 +86,7 @@
 
                 <c:if test="${user_active_page lt user_page_amount}">
                     <li class="page-item"><a class="page-link"
-                                             href="${pageContext.request.contextPath}/controller?command=${user_paging_command}&user_page=${user_active_page+1}"><fmt:message
+                                             href="admin?user_active_page=${user_active_page + 1}&lot_active_page=${lot_active_page}"><fmt:message
                             key="paging.next"/></a>
                     </li>
                 </c:if>
@@ -96,7 +96,7 @@
 </div>
 
 <div id="Lots" class="tabcontent">
-    <form action="${pageContext.request.contextPath}/controller?command=search_lot_by_name" method="post">
+    <form action="admin" method="get">
         <input name="search" type="text" placeholder="<fmt:message key="search"/>" value="${search}"/>
         <button type="submit">&hookleftarrow;</button>
     </form>
@@ -113,20 +113,20 @@
         <c:forEach var="lot" items="${requestScope.lot_list}">
             <tr>
                 <td>
-                    <a href="${pageContext.request.contextPath}/controller?command=to_lot&lot_id=${lot.id}">${lot.id}</a>
+                    <a href="/lot/${lot.id}">${lot.id}</a>
                 </td>
                 <td>${lot.name}</td>
                 <td>${lot.startTime}</td>
                 <td>${lot.finishTime}</td>
                 <td>${lot.currentCost}</td>
-                <td><a href="${pageContext.request.contextPath}/controller?command=to_profile&user_id=${lot.sellerId}">
+                <td><a href="/user/${lot.sellerId}">
                         ${lot.sellerId}</a></td>
                 <td><c:choose>
                     <c:when test="${lot.buyerId eq 0}">
                         ---
                     </c:when>
                     <c:otherwise>
-                        <a href="${pageContext.request.contextPath}/controller?command=to_profile&user_id=${lot.buyerId}">${lot.buyerId}</a>
+                        <a href="/user/${lot.buyerId}">${lot.buyerId}</a>
                     </c:otherwise>
                 </c:choose>
                 </td>
@@ -138,7 +138,7 @@
             <ul class="pagination">
                 <c:if test="${lot_active_page != 1}">
                     <li class="page-item"><a class="page-link"
-                                             href="${pageContext.request.contextPath}/controller?command=${lot_paging_command}&lot_page=${lot_active_page-1}"><fmt:message
+                                             href="admin?user_active_page=${user_active_page}&lot_active_page=${lot_active_page - 1}"><fmt:message
                             key="paging.previous"/></a>
                     </li>
                 </c:if>
@@ -152,7 +152,7 @@
                         </c:when>
                         <c:otherwise>
                             <li class="page-item"><a class="page-link"
-                                                     href="${pageContext.request.contextPath}/controller?command=${lot_paging_command}&lot_page=${i}">${i}</a>
+                                                     href="admin?user_active_page=${user_active_page}&lot_active_page=${i}">${i}</a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -160,7 +160,7 @@
 
                 <c:if test="${lot_active_page lt lot_page_amount}">
                     <li class="page-item"><a class="page-link"
-                                             href="${pageContext.request.contextPath}/controller?command=${lot_paging_command}&lot_page=${lot_active_page+1}"><fmt:message
+                                             href="admin?user_active_page=${user_active_page}&lot_active_page=${lot_active_page + 1}"><fmt:message
                             key="paging.next"/></a>
                     </li>
                 </c:if>

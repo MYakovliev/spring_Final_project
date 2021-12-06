@@ -35,7 +35,7 @@
         <input type="password" name="new_password" placeholder="<fmt:message key="user_edit.new_password"/>" required/>
         <input type="submit" value="<fmt:message key="user_edit.change"/>">
     </form>
-    <p class="message"><a href="controller?command=to_lots">
+    <p class="message"><a href="/main">
         <fmt:message key="login.back_to_main"/></a>
     </p>
 </div>

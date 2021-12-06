@@ -17,6 +17,6 @@
 </head>
 <body>
 <h3><fmt:message key="ban.sorry"/></h3>
-<a href="${pageContext.request.contextPath}/controller?command=logout"><fmt:message key="header.sign_out"/></a>
+<a href="/logout"><fmt:message key="header.sign_out"/></a>
 </body>
 </html>

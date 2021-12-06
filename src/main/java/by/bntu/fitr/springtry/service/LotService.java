@@ -57,7 +57,7 @@ public interface LotService {
      * @return list of lots or empty list if no lots found
      * @throws ServiceException
      */
-    List<Lot> findLotByBuyerId(User buyer, int pageNumber, int amountPerPage);
+    Page<Lot> findLotByBuyerId(User buyer, int pageNumber, int amountPerPage);
 
     /**
      * Service to find list of lots that are selling by exact seller
@@ -68,7 +68,7 @@ public interface LotService {
      * @return list of lots or empty list if no lots found
      * @throws ServiceException
      */
-    List<Lot> findLotBySellerId(User seller, int pageNumber, int amountPerPage);
+    Page<Lot> findLotBySellerId(User seller, int pageNumber, int amountPerPage);
 
     /**
      * Service to find list of lots that are active now
@@ -78,7 +78,7 @@ public interface LotService {
      * @return list of lots or empty list if no lots found
      * @throws ServiceException
      */
-    List<Lot> findActive(int pageNumber, int amountPerPage);
+    Page<Lot> findActive(int pageNumber, int amountPerPage);
 
     /**
      * Service to find list of all lots
@@ -88,7 +88,7 @@ public interface LotService {
      * @return list of lots or empty list if no lots found
      * @throws ServiceException
      */
-    List<Lot> findAll(int pageNumber, int amountPerPage);
+    Page<Lot> findAll(int pageNumber, int amountPerPage);
 
     /**
      * Service to find out if lot has been submitted by admin

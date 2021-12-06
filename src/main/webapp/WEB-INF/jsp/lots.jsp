@@ -16,17 +16,17 @@
 <jsp:include page="support/header.jsp"/>
 <div class="add_lot">
     <tag:access role="seller">
-        <a href="${pageContext.request.contextPath}/controller?command=to_lot_edit"><fmt:message key="lots.add_lot"/></a>
+        <a href="/lot/edit"><fmt:message key="lots.add_lot"/></a>
     </tag:access>
 </div>
-<form action="${pageContext.request.contextPath}/controller?command=search_lot_by_name" method="post">
+<form action="/main" method="get">
     <input name="search" type="text" placeholder="<fmt:message key="search"/>" value="${search}"/>
     <button type="submit">&hookleftarrow;</button>
 </form>
 <div class="main_block">
     <c:forEach var="lot" items="${lot_list}">
         <div class="lot_block"
-             onclick="location.href='${pageContext.request.contextPath}/controller?command=to_lot&lot_id=${lot.id}'">
+             onclick="location.href='/lot/${lot.id}'">
             <div class="lot_name">${lot.name}</div>
             <img src="${lot.images[0]}" alt="image"/>
             <div class="lot_cost">${lot.currentCost}&dollar;</div>
@@ -43,7 +43,7 @@
         <ul class="pagination">
             <c:if test="${lot_active_page != 1}">
                 <li class="page-item"><a class="page-link"
-                                         href="${pageContext.request.contextPath}/controller?command=${lot_paging_command}&lot_page=${lot_active_page-1}"><fmt:message key="paging.previous"/></a>
+                                         href="main?page=${lot_active_page-1}"><fmt:message key="paging.previous"/></a>
                 </li>
             </c:if>
 
@@ -56,7 +56,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="page-item"><a class="page-link"
-                                                 href="${pageContext.request.contextPath}/controller?command=${lot_paging_command}&lot_page=${i}">${i}</a>
+                                                 href="main?page=${i}">${i}</a>
                         </li>
                     </c:otherwise>
                 </c:choose>
@@ -64,7 +64,7 @@
 
             <c:if test="${lot_active_page lt lot_page_amount}">
                 <li class="page-item"><a class="page-link"
-                                         href="${pageContext.request.contextPath}/controller?command=${lot_paging_command}&lot_page=${lot_active_page+1}"><fmt:message key="paging.next"/></a>
+                                         href="main?page=${lot_active_page+1}"><fmt:message key="paging.next"/></a>
                 </li>
             </c:if>
         </ul>

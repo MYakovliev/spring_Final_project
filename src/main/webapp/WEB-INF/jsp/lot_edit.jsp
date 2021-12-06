@@ -22,7 +22,7 @@
     <title><fmt:message key="lot_edit.title"/></title>
 </head>
 <body>
-<form class="container" action="${pageContext.request.contextPath}/upload/" method="post" enctype="multipart/form-data">
+<form class="container" action="/new_lot" method="post" enctype="multipart/form-data">
     <input type="hidden" name="command" value="add_lot"/>
     <input type="text" name="name" value="${lot.name}" title="<fmt:message key="lot_edit.name_title"/>" placeholder="<fmt:message key="lot_edit.name"/>" required pattern="[-=:'\.)\s(\wА-Яа-я0-9]{4,45}"/>
     <br/>
@@ -58,7 +58,7 @@
            onchange="readURL(this, 'image_path5Image', null)"/>
     <br/>
     <input type="submit" name="btn" value="<fmt:message key="lot_edit.submit"/>"/>
-    <p class="message"><a href="controller?command=to_lots">
+    <p class="message"><a href="/main">
         <fmt:message key="login.back_to_main"/></a>
     </p>
 </form>

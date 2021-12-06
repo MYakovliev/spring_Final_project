@@ -14,9 +14,9 @@ import java.util.List;
 public interface LotRepository extends PagingAndSortingRepository<Lot, Long> {
     Page<Lot> findByNameLike(String name, Pageable pageable);
 
-    List<Lot> findByBuyer(User buyer, Pageable pageable);
+    Page<Lot> findByBuyer(User buyer, Pageable pageable);
 
-    List<Lot> findBySeller(User seller, Pageable pageable);
+    Page<Lot> findBySeller(User seller, Pageable pageable);
 
-    List<Lot> findByFinishTimeAfter(Timestamp now, Pageable pageable);
+    Page<Lot> findByFinishTimeAfter(Timestamp now, Pageable pageable);
 }

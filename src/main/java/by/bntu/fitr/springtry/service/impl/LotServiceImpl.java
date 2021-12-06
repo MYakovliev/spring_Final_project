@@ -16,10 +16,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,8 +71,8 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public List<Lot> findLotByBuyerId(User buyer, int pageNumber, int amountPerPage) {
-        List<Lot> lots = lotRepository.findByBuyer(buyer, PageRequest.of(pageNumber - 1, amountPerPage));
+    public Page<Lot> findLotByBuyerId(User buyer, int pageNumber, int amountPerPage) {
+        Page<Lot> lots = lotRepository.findByBuyer(buyer, PageRequest.of(pageNumber - 1, amountPerPage));
         lots.forEach(lot -> {
             lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
         });
@@ -78,8 +80,8 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public List<Lot> findLotBySellerId(User seller, int pageNumber, int amountPerPage) {
-        List<Lot> lots = lotRepository.findBySeller(seller, PageRequest.of(pageNumber - 1, amountPerPage));
+    public Page<Lot> findLotBySellerId(User seller, int pageNumber, int amountPerPage) {
+        Page<Lot> lots = lotRepository.findBySeller(seller, PageRequest.of(pageNumber - 1, amountPerPage));
         lots.forEach(lot -> {
             lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
         });
@@ -87,9 +89,9 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public List<Lot> findActive(int pageNumber, int amountPerPage) {
+    public Page<Lot> findActive(int pageNumber, int amountPerPage) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        List<Lot> lots = lotRepository.findByFinishTimeAfter(now, PageRequest.of(pageNumber - 1, amountPerPage));
+        Page<Lot> lots = lotRepository.findByFinishTimeAfter(now, PageRequest.of(pageNumber - 1, amountPerPage));
         lots.forEach(lot -> {
             lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
         });
@@ -97,8 +99,8 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public List<Lot> findAll(int pageNumber, int amountPerPage) {
-        List<Lot> lots = lotRepository.findAll(PageRequest.of(pageNumber - 1, amountPerPage)).getContent();
+    public Page<Lot> findAll(int pageNumber, int amountPerPage) {
+        Page<Lot> lots = lotRepository.findAll(PageRequest.of(pageNumber - 1, amountPerPage));
         lots.forEach(lot -> {
             lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
         });
@@ -107,10 +109,10 @@ public class LotServiceImpl implements LotService {
 
     @Override
     public boolean isLotSubmitted(long lotId) {
-        lotRepository.findById(lotId).orElseThrow(() -> new ServiceException(ErrorMessage.UNKNOWN_LOT));
+        Lot lot = lotRepository.findById(lotId).orElseThrow(() -> new ServiceException(ErrorMessage.UNKNOWN_LOT));
         List<Bid> bidHistory = bidRepository.findByIdLot(lotId);
         bidHistory.removeIf(bid -> bid.getStatus()!= Status.WON);
         Optional<Bid> submittedWinner = bidHistory.stream().findAny();
-        return submittedWinner.isPresent();
+        return submittedWinner.isPresent() && lot.getFinishTime().before(new Date());
     }
 }

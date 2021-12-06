@@ -27,9 +27,9 @@
     <a href="#footer"><fmt:message key="header.contact"/></a>
     <tag:access role="admin"><a href="/admin"><fmt:message
             key="header.admin_page"/></a></tag:access>
-    <tag:access role="seller"><a href="/main?seller_id=${sessionScope.user.id}"><fmt:message
+    <tag:access role="seller"><a href="/main?find_user_lot=true"><fmt:message
             key="header.my_lots"/></a></tag:access>
-    <tag:access role="buyer"><a href="/main?buyer_id=${sessionScope.user.id}"><fmt:message
+    <tag:access role="buyer"><a href="/main?find_user_lot=true"><fmt:message
             key="header.my_lots"/></a></tag:access>
     <div class="topnav-right">
         <div class="buttons">

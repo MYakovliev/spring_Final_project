@@ -3,6 +3,7 @@ package by.bntu.fitr.springtry.service;
 import by.bntu.fitr.springtry.entity.Lot;
 import by.bntu.fitr.springtry.entity.User;
 import by.bntu.fitr.springtry.entity.UserRole;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 
@@ -98,7 +99,7 @@ public interface UserService {
      * @return list of users or empty list if no users found
      * @throws ServiceException
      */
-    List<User> findUserByName(String name, int pageNumber, int amountPerPage) throws ServiceException;
+    Page<User> findUserByName(String name, int pageNumber, int amountPerPage) throws ServiceException;
 
 
     /**
@@ -109,6 +110,6 @@ public interface UserService {
      * @return list of users or empty list if no users found
      * @throws ServiceException
      */
-    List<User> findAll(int pageNumber, int amountPerPage) throws ServiceException;
+    Page<User> findAll(int pageNumber, int amountPerPage) throws ServiceException;
 
 }

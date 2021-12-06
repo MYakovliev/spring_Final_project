@@ -21,7 +21,7 @@
     <c:if test="${error ne null}">
         <p class="error"><fmt:message key="${error}"/></p>
     </c:if>
-    <form class="register-form" action="register.do" method="post">
+    <form class="register-form" action="/do_signup" method="post">
         <input type="hidden" name="command" value="register"/>
         <input type="text" placeholder="<fmt:message key="registration.login"/>" title="<fmt:message key="registration.login_title"/>" name="login" required pattern="[\wА-Яа-я0-9]{4,35}"/>
         <input type="text" placeholder="<fmt:message key="registration.name"/>" title="<fmt:message key="registration.name_title"/>" name="name" required pattern="[\wА-Яа-я]{1,35}"/>
@@ -33,8 +33,8 @@
             <option name="role" value="seller"><fmt:message key="registration.seller_role"/></option>
         </select>
         <input type="submit" name="btn" value="<fmt:message key="registration.button"/>"/>
-        <p class="message"><fmt:message key="registration.ask_to_sign_in"/> <a href="controller?command=to_login"><fmt:message key="registration.sign_in"/></a></p>
-        <p class="message"><fmt:message key="registration.ask_to_main"/> <a href="controller?command=to_lots"><fmt:message key="registration.back_to_main"/></a></p>
+        <p class="message"><fmt:message key="registration.ask_to_sign_in"/> <a href="/login"><fmt:message key="registration.sign_in"/></a></p>
+        <p class="message"><fmt:message key="registration.ask_to_main"/> <a href="/main"><fmt:message key="registration.back_to_main"/></a></p>
     </form>
 </div>
 </body>

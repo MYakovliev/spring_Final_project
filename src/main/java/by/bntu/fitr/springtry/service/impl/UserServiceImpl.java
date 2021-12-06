@@ -11,6 +11,7 @@ import by.bntu.fitr.springtry.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
         if (!(UserValidator.isValidLogin(login) && UserValidator.isValidPassword(password)
                 && UserValidator.isValidMail(mail) && UserValidator.isValidName(name) &&
                 (role == UserRole.BUYER || role == UserRole.SELLER))
-                ) {
+        ) {
             throw new ServiceException(ErrorMessage.INVALID_DATA_FORMAT);
         }
         password = passwordEncoder.encode(password);
@@ -116,12 +117,20 @@ public class UserServiceImpl implements UserService {
                 () -> new ServiceException(ErrorMessage.UNKNOWN_USER)
         );
         BigDecimal balance = user.getBalance();
-        user.setBalance(balance.add(paymentDecimal));
+        if (user.getUserRole() == UserRole.BUYER) {
+            user.setBalance(user.getBalance().add(balance));
+        } else if (user.getUserRole() == UserRole.SELLER) {
+            BigDecimal subtracted = user.getBalance().subtract(balance);
+            if (subtracted.compareTo(BigDecimal.ZERO) < 0){
+                throw new ServiceException(ErrorMessage.NOT_ENOUGH_MONEY);
+            }
+            user.setBalance(subtracted);
+        }
         return userRepository.save(user);
     }
 
     @Override
-    public List<User> findUserByName(String name, int pageNumber, int amountPerPage) throws ServiceException {
+    public Page<User> findUserByName(String name, int pageNumber, int amountPerPage) throws ServiceException {
         if (pageNumber < 1 || amountPerPage < 1) {
             throw new ServiceException(ErrorMessage.INVALID_DATA_FORMAT);
         }
@@ -131,11 +140,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<User> findAll(int pageNumber, int amountPerPage) throws ServiceException {
+    public Page<User> findAll(int pageNumber, int amountPerPage) throws ServiceException {
         if (pageNumber < 1 || amountPerPage < 1) {
             throw new ServiceException(ErrorMessage.INVALID_DATA_FORMAT);
         }
-        return userRepository.findAll(PageRequest.of(pageNumber - 1, amountPerPage)).getContent();
+        return userRepository.findAll(PageRequest.of(pageNumber - 1, amountPerPage));
     }
 
     private boolean isTaken(String login) {

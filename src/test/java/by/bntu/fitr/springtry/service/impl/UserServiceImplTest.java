@@ -137,7 +137,7 @@ class UserServiceImplTest {
         List<User> expected = new ArrayList<>();
         expected.add(user1);
         expected.add(user2);
-        List<User> actual = userService.findUserByName("name", 1, 20);
+        List<User> actual = userService.findUserByName("name", 1, 20).getContent();
         assertEquals(expected, actual);
     }
 
@@ -156,7 +156,7 @@ class UserServiceImplTest {
         List<User> expected = new ArrayList<>();
         expected.add(user1);
         expected.add(user2);
-        List<User> actual = userService.findAll( 1, 20);
+        List<User> actual = userService.findAll( 1, 20).getContent();
         assertEquals(expected, actual);
     }
 
