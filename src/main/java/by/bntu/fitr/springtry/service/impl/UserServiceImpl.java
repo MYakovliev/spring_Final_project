@@ -24,6 +24,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final String ANY_SQL_SYMBOL = "%";
     private static final Logger logger = LogManager.getLogger();
+    private static final String DEFAULT_AVATAR = "/img/default_image.png";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -66,6 +67,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setLogin(login);
         user.setPassword(password);
+        user.setAvatar(DEFAULT_AVATAR);
         return userRepository.save(user);
     }
 
@@ -116,16 +118,18 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ServiceException(ErrorMessage.UNKNOWN_USER)
         );
+        logger.info("current balance:{}, user role:{}", user.getBalance(), user.getUserRole());
         BigDecimal balance = user.getBalance();
         if (user.getUserRole() == UserRole.BUYER) {
-            user.setBalance(user.getBalance().add(balance));
+            user.setBalance(user.getBalance().add(paymentDecimal));
         } else if (user.getUserRole() == UserRole.SELLER) {
-            BigDecimal subtracted = user.getBalance().subtract(balance);
+            BigDecimal subtracted = user.getBalance().subtract(paymentDecimal);
             if (subtracted.compareTo(BigDecimal.ZERO) < 0){
                 throw new ServiceException(ErrorMessage.NOT_ENOUGH_MONEY);
             }
             user.setBalance(subtracted);
         }
+        logger.info("current balance:{}", user.getBalance());
         return userRepository.save(user);
     }
 
@@ -177,12 +181,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         Bid newBid = new Bid(0, buyer, bid, Status.WINING);
+        newBid.setIdLot(lot.getId());
         final Bid saved = bidRepository.save(newBid);
         bidHistory.add(saved);
         final Lot savedLot = lotRepository.save(lot);
         savedLot.setBidHistory(bidHistory);
         return savedLot;
     }
-
-
 }

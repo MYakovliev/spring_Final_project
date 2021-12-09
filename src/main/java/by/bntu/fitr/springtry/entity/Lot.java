@@ -54,7 +54,7 @@ public class Lot {
     }
 
     public void setBidHistory(List<Bid> bidHistory) {
-        this.bidHistory = bidHistory;
+        this.bidHistory = new ArrayList<>(bidHistory);
     }
 
     public long getId() {
@@ -98,6 +98,10 @@ public class Lot {
     }
 
     public BigDecimal getCurrentCost() {
+        Optional<Bid> any = bidHistory.stream().filter(bid -> bid.getStatus() == Status.WINING).findAny();
+        if (any.isPresent()){
+            return any.get().getBid();
+        }
         return currentCost;
     }
 

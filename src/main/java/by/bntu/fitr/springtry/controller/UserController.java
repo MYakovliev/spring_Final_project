@@ -9,16 +9,12 @@ import by.bntu.fitr.springtry.service.ServiceException;
 import by.bntu.fitr.springtry.service.UserService;
 import by.bntu.fitr.springtry.util.*;
 import by.bntu.fitr.springtry.util.SessionAttribute;
-import by.bntu.fitr.springtry.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Jsp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 

@@ -29,10 +29,12 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.doubleThat;
 import static org.mockito.Mockito.when;
-
+//todo make same with mock
 @SpringBootTest(classes = {TestConfig.class})
 @ActiveProfiles("test")
 class UserServiceImplTest {
+    private static final User user1 = new User(1, "name1", "mail1@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
+            "/img/default_image.png", false, "login1");
 
     @Autowired
     private LotService lotService;
@@ -41,12 +43,29 @@ class UserServiceImplTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Test
+    @DirtiesContext
+    void makeBidPositive() {
+        Lot lotById = lotService.findLotById(1);
+        user1.setBalance(new BigDecimal("40"));
+        Lot lot = userService.makeBid(user1, "30.01", lotById);
+        BigDecimal currentCost = lot.getCurrentCost();
+        assertEquals(new BigDecimal("30.01"), currentCost);
+    }
 
+//todo add parametrized
+    @Test
+    @DirtiesContext
+    void makeBidNegative() {
+        Lot lotById = lotService.findLotById(1);
+        user1.setBalance(new BigDecimal("40"));
+        userService.makeBid(user1, "30.01", lotById);
+        assertThrows(ServiceException.class, () -> userService.makeBid(user1, "p", lotById));
+    }
 
     @Test
     void loginPositive() {
-        User expected = new User(1, "name1", "mail1@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
-                null, false, "login1");
+        User expected = user1;
         User actual = userService.login("login1", "password");
         assertEquals(expected, actual);
     }
@@ -54,19 +73,20 @@ class UserServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideInvalidDataForLogin")
     void loginNegative(String login, String password) {
-        assertThrows(ServiceException.class, ()-> userService.login(login, password));
+        assertThrows(ServiceException.class, () -> userService.login(login, password));
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidDataForRegister")
     void registerNegative(String name, String mail, String login, String password, UserRole role) {
-        assertThrows(ServiceException.class, ()-> userService.register(name, mail, login, password, role));
+        assertThrows(ServiceException.class, () -> userService.register(name, mail, login, password, role));
     }
+
     @Test
     @DirtiesContext
     void registerPositive() {
         User expected = new User(3, "name", "mail3@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
-                null, false, "login3");
+                "/img/default_image.png", false, "login3");
         User actual = userService.register("name", "mail3@mail.ma", "login3", "password", UserRole.BUYER);
         assertEquals(expected, actual);
     }
@@ -74,7 +94,7 @@ class UserServiceImplTest {
     @Test
     void findUserByIdPositive() {
         User expected = new User(1, "name1", "mail1@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
-                null, false, "login1");
+                "/img/default_image.png", false, "login1");
         User actual = userService.findUserById(1);
         assertEquals(expected, actual);
     }
@@ -82,7 +102,7 @@ class UserServiceImplTest {
     @Test
     void findUserByIdNegative() {
         int idNotInDb = 1000;
-        assertThrows(ServiceException.class, ()->userService.findUserById(idNotInDb));
+        assertThrows(ServiceException.class, () -> userService.findUserById(idNotInDb));
     }
 
     @Test
@@ -97,7 +117,7 @@ class UserServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideInvalidDataForChangeUserData")
     void changeUserDataNegative(long userId, String name, String mail, String avatar) {
-        assertThrows(ServiceException.class, ()-> userService.changeUserData(userId, avatar, name, mail));
+        assertThrows(ServiceException.class, () -> userService.changeUserData(userId, avatar, name, mail));
     }
 
     @Test
@@ -110,30 +130,31 @@ class UserServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideInvalidDataForChangeUserPassword")
     void changeUserPasswordNegative(long userId, String oldPassword, String newPassword) {
-        assertThrows(ServiceException.class, ()-> userService.changeUserPassword(userId, oldPassword, newPassword));
+        assertThrows(ServiceException.class, () -> userService.changeUserPassword(userId, oldPassword, newPassword));
     }
 
     @Test
     @DirtiesContext
     void addBalancePositive() {
         User expected = new User(1, "name1", "mail1@mail.ma", new BigDecimal("12.01"), UserRole.BUYER,
-                null, false, "login1");
+                "/img/default_image.png", false, "login1");
         User actual = userService.addBalance(1, "12.01");
+
         assertEquals(expected, actual);
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidDataForAddBalance")
     void addBalanceNegative(long userId, String payment) {
-        assertThrows(ServiceException.class, ()-> userService.addBalance(userId, payment));
+        assertThrows(ServiceException.class, () -> userService.addBalance(userId, payment));
     }
 
     @Test
     void findUserByNamePositive() {
         User user1 = new User(1, "name1", "mail1@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
-                null, false, "login1");
+                "/img/default_image.png", false, "login1");
         User user2 = new User(2, "name2", "mail2@mail.ma", new BigDecimal("0.00"), UserRole.SELLER,
-                null, false, "login2");
+                "/img/default_image.png", false, "login2");
         List<User> expected = new ArrayList<>();
         expected.add(user1);
         expected.add(user2);
@@ -144,26 +165,26 @@ class UserServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideInvalidDataForFindUserByName")
     void findUserByNameNegative(String name, int page, int amount) {
-        assertThrows(ServiceException.class, ()-> userService.findUserByName(name, page, amount));
+        assertThrows(ServiceException.class, () -> userService.findUserByName(name, page, amount));
     }
 
     @Test
     void findAllPositive() {
         User user1 = new User(1, "name1", "mail1@mail.ma", new BigDecimal("0.00"), UserRole.BUYER,
-                null, false, "login1");
+                "/img/default_image.png", false, "login1");
         User user2 = new User(2, "name2", "mail2@mail.ma", new BigDecimal("0.00"), UserRole.SELLER,
-                null, false, "login2");
+                "/img/default_image.png", false, "login2");
         List<User> expected = new ArrayList<>();
         expected.add(user1);
         expected.add(user2);
-        List<User> actual = userService.findAll( 1, 20).getContent();
+        List<User> actual = userService.findAll(1, 20).getContent();
         assertEquals(expected, actual);
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidDataForFindAll")
     void findAllNegative(int page, int amount) {
-        assertThrows(ServiceException.class, ()-> userService.findAll(page, amount));
+        assertThrows(ServiceException.class, () -> userService.findAll(page, amount));
     }
 
     private static Stream<Arguments> provideInvalidDataForLogin() {
@@ -183,14 +204,14 @@ class UserServiceImplTest {
                 Arguments.of("name", "imail@ma.ma", "login", "pass", UserRole.BUYER),
                 Arguments.of("invalidNaMES Indeed", "email@ma.ma", "login", "password", UserRole.BUYER),
                 Arguments.of("name", "inva@ma.ma", "login1", "password", UserRole.BUYER)
-                );
+        );
     }
 
     public static Stream<Arguments> provideInvalidDataForChangeUserData() {
         return Stream.of(
-          Arguments.of(1000, "avatar.jpg", "name", "mail@mail.ma"),
-          Arguments.of(1, "avatar.jpg", "invalid name./", "mail@mail.ma"),
-          Arguments.of(1, "avatar.jpg", "name", "invalid mail")
+                Arguments.of(1000, "avatar.jpg", "name", "mail@mail.ma"),
+                Arguments.of(1, "avatar.jpg", "invalid name./", "mail@mail.ma"),
+                Arguments.of(1, "avatar.jpg", "name", "invalid mail")
         );
     }
 
@@ -217,10 +238,10 @@ class UserServiceImplTest {
         );
     }
 
-    public static Stream<Arguments> provideInvalidDataForFindAll(){
+    public static Stream<Arguments> provideInvalidDataForFindAll() {
         return Stream.of(
-                Arguments.of( 0, 1),
-                Arguments.of( 1, 0)
+                Arguments.of(0, 1),
+                Arguments.of(1, 0)
         );
     }
 }

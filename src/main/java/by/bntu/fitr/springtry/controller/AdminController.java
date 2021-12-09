@@ -32,9 +32,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/ban/{id}")
-    public ModelAndView banUser(@RequestParam("user_active_page") int userActivePage,
-                                @RequestParam("lot_active_page") int lotActivePage, @PathVariable("id") long userId, HttpSession session) {
+    @GetMapping("/ban/{id}")
+    public ModelAndView banUser(@RequestParam(value = "user_active_page", required = false, defaultValue = "1") int userActivePage,
+                                @RequestParam(value = "lot_active_page", required = false, defaultValue = "1") int lotActivePage, @PathVariable("id") long userId, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView(DEFAULT_REDIRECT);
         if (session != null) {
             User user = (User) session.getAttribute(SessionAttribute.USER);
@@ -47,9 +47,9 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/unban/{id}")
-    public ModelAndView unbanUser(@RequestParam("user_active_page") int userActivePage,
-                                  @RequestParam("lot_active_page") int lotActivePage, @PathVariable("id") long userId, HttpSession session) {
+    @GetMapping("/unban/{id}")
+    public ModelAndView unbanUser(@RequestParam(value = "user_active_page", required = false, defaultValue = "1") int userActivePage,
+                                  @RequestParam(value = "lot_active_page", required = false, defaultValue = "1") int lotActivePage, @PathVariable("id") long userId, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView(DEFAULT_REDIRECT);
         if (session != null) {
             User user = (User) session.getAttribute(SessionAttribute.USER);

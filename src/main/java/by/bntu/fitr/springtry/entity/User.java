@@ -170,7 +170,6 @@ public class User implements Serializable {
         sb.append(", userRole=").append(userRole);
         sb.append(", avatar='").append(avatar).append('\'');
         sb.append(", banned=").append(banned);
-        sb.append(", password='").append(password).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append('}');
         return sb.toString();

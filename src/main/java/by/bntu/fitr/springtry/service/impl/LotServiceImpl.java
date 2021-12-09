@@ -72,7 +72,7 @@ public class LotServiceImpl implements LotService {
 
     @Override
     public Page<Lot> findLotByBuyerId(User buyer, int pageNumber, int amountPerPage) {
-        Page<Lot> lots = lotRepository.findByBuyer(buyer, PageRequest.of(pageNumber - 1, amountPerPage));
+        Page<Lot> lots = lotRepository.findByBuyer(buyer.getId(), PageRequest.of(pageNumber - 1, amountPerPage));
         lots.forEach(lot -> {
             lot.setBidHistory(bidRepository.findByIdLot(lot.getId()));
         });

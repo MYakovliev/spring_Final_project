@@ -32,6 +32,7 @@ public class BanFilter implements Filter {
                 boolean banned = user.isBanned();
                 if (banned) {
                     servletRequest.getRequestDispatcher("/to_ban").forward(request, response);
+                    return;
                 }
             }
         }

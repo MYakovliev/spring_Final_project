@@ -30,6 +30,9 @@ public class Bid {
     }
 
 
+    public void setIdLot(long idLot) {
+        this.idLot = idLot;
+    }
 
     public long getId() {
         return id;
