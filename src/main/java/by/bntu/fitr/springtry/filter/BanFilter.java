@@ -29,6 +29,7 @@ public class BanFilter implements Filter {
             User userFromSession = (User) session.getAttribute(SessionAttribute.USER);
             if (userFromSession != null) {
                 User user = userService.findUserById(userFromSession.getId());
+                session.setAttribute(SessionAttribute.USER, user);
                 boolean banned = user.isBanned();
                 if (banned) {
                     servletRequest.getRequestDispatcher("/to_ban").forward(request, response);

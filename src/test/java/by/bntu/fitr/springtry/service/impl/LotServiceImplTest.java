@@ -3,8 +3,13 @@ package by.bntu.fitr.springtry.service.impl;
 import by.bntu.fitr.springtry.config.TestConfig;
 import by.bntu.fitr.springtry.entity.*;
 import by.bntu.fitr.springtry.service.LotService;
+import by.bntu.fitr.springtry.service.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -17,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,8 +70,24 @@ class LotServiceImplTest {
     void createNewLotPositive() {
         long expected = 3;
         Lot lotName = lotService.createNewLot("lotName", null, "20.1", null,
-                Timestamp.valueOf("2022-05-01 20:14:10"), seller, new ArrayList<>());
+                Timestamp.valueOf("2022-05-01 20:14:10"), seller,Arrays.asList("one", "two"));
         assertEquals(expected, lotName.getId());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideCreateNewLotNegative")
+    void createNewLotNegative(String name, String description, String startBid, Timestamp startTime,
+                              Timestamp finishTime, User seller, List<String> images){
+        assertThrows(ServiceException.class, ()->lotService.createNewLot(name, description, startBid, startTime, finishTime, seller, images));
+    }
+
+    private static Stream<Arguments> provideCreateNewLotNegative() {
+        return Stream.of(
+                Arguments.of("<!-- non !-->", null, "20.1", null, Timestamp.valueOf("2022-05-01 20:14:10"), seller, new ArrayList<>()),
+                Arguments.of("valid name", null, "-20.1", null, Timestamp.valueOf("2022-05-01 20:14:10"), seller, new ArrayList<>()),
+                Arguments.of("valid name", null, "20.1", null, Timestamp.valueOf("2020-05-01 20:14:10"), seller, new ArrayList<>()),
+                Arguments.of("<!-- non !-->", null, "20.1", null, Timestamp.valueOf("2022-05-01 20:14:10"), buyer, new ArrayList<>())
+        );
     }
 
     @Test
@@ -75,11 +97,32 @@ class LotServiceImplTest {
         assertEquals(expected, actual);
     }
 
+
+    @Test
+    void findLotByIdNegative(){
+        assertThrows(ServiceException.class, ()->lotService.findLotById(1000));
+    }
+
     @Test
     void findLotByNamePositive() {
         List<Lot> expected = Arrays.asList(lot1, lot2);
         Page<Lot> actual = lotService.findLotByName("name", 1, Integer.MAX_VALUE);
         assertEquals(expected, actual.getContent());
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("provideFindLotByNameNegative")
+    void findLotByNameNegative(String name, int page, int amount){
+        assertThrows(IllegalArgumentException.class, ()->lotService.findLotByName(name, page, amount));
+    }
+
+    private static Stream<Arguments> provideFindLotByNameNegative() {
+        return Stream.of(
+                Arguments.of("name", 0, 0),
+                Arguments.of("name", 1, -1),
+                Arguments.of("name", 1, 0)
+        );
     }
 
     @Test
@@ -89,11 +132,41 @@ class LotServiceImplTest {
         assertEquals(expected, actual.getContent());
     }
 
+
+    @ParameterizedTest
+    @MethodSource("provideFindLotByBuyerIdNegative")
+    void findLotByBuyerIdNegative(User buyerId, int page, int amount){
+        assertThrows(IllegalArgumentException.class, ()->lotService.findLotByBuyerId(buyerId, page, amount));
+    }
+
+    private static Stream<Arguments> provideFindLotByBuyerIdNegative() {
+        return Stream.of(
+                Arguments.of(buyer, 0, 0),
+                Arguments.of(seller, 1, -1),
+                Arguments.of(buyer, 1, 0)
+        );
+    }
+
     @Test
     void findLotBySellerIdPositive() {
         List<Lot> expected = Arrays.asList(lot1, lot2);
         Page<Lot> actual = lotService.findLotBySellerId(seller, 1, Integer.MAX_VALUE);
         assertEquals(expected, actual.getContent());
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("provideFindLotBySellerIdNegative")
+    void findLotBySellerIdNegative(User sellerId, int page, int amount){
+        assertThrows(IllegalArgumentException.class, ()->lotService.findLotBySellerId(sellerId, page, amount));
+    }
+
+    private static Stream<Arguments> provideFindLotBySellerIdNegative() {
+        return Stream.of(
+                Arguments.of(buyer, 0, 0),
+                Arguments.of(seller, 1, -1),
+                Arguments.of(buyer, 1, 0)
+        );
     }
 
     @Test
@@ -103,6 +176,21 @@ class LotServiceImplTest {
         assertEquals(expected, actual.getContent());
     }
 
+
+    @ParameterizedTest
+    @MethodSource("provideFindActiveNegative")
+    void findActiveNegative(int page, int amount){
+        assertThrows(IllegalArgumentException.class, ()->lotService.findActive(page, amount));
+    }
+
+    private static Stream<Arguments> provideFindActiveNegative() {
+        return Stream.of(
+                Arguments.of(0, 0),
+                Arguments.of(1, -1),
+                Arguments.of(1, 0)
+        );
+    }
+
     @Test
     void findAllPositive() {
         List<Lot> expected = Arrays.asList(lot1, lot2);
@@ -110,8 +198,28 @@ class LotServiceImplTest {
         assertEquals(expected, actual.getContent());
     }
 
+
+    @ParameterizedTest
+    @MethodSource("provideFindAllNegative")
+    void findAllNegative(int page, int amount){
+        assertThrows(IllegalArgumentException.class, ()->lotService.findAll(page, amount));
+    }
+
+    private static Stream<Arguments> provideFindAllNegative() {
+        return Stream.of(
+                Arguments.of(0, 0),
+                Arguments.of(1, -1),
+                Arguments.of(1, 0)
+        );
+    }
+
     @Test
     void isLotSubmittedPositive() {
         assertFalse(lotService.isLotSubmitted(1));
+    }
+
+    @Test
+    void isLotSubmittedNoLot(){
+        assertThrows(ServiceException.class, ()->lotService.isLotSubmitted(1000));
     }
 }

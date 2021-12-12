@@ -129,13 +129,14 @@ public class UserController {
     @PostMapping("/make_bid")
     public ModelAndView makeBid(PayData payData, ModelAndView modelAndView, HttpSession session) {
         try {
-            modelAndView.setViewName(String.format(TO_LOT_REDIRECT, payData.getLotId()));
+            modelAndView.setViewName(DEFAULT_REDIRECT);
             if (session != null){
                 User user = (User) session.getAttribute(SessionAttribute.USER);
                 if (user != null && user.getUserRole() == UserRole.BUYER){
                     Lot lot = lotService.findLotById(payData.getLotId());
                     userService.makeBid(user, payData.getBid(), lot);
                 }
+                modelAndView.setViewName(String.format(TO_LOT_REDIRECT, payData.getLotId()));
             }
         } catch (ServiceException e) {
             modelAndView.addObject(RequestParameter.ERROR, e.getMessage());
@@ -200,6 +201,7 @@ public class UserController {
 
     @GetMapping("/user/edit")
     public ModelAndView toUserEdit(HttpSession session, ModelAndView modelAndView) {
+        modelAndView.setViewName(DEFAULT_REDIRECT);
         if (session != null) {
             User user = (User) session.getAttribute(SessionAttribute.USER);
             if (user != null) {

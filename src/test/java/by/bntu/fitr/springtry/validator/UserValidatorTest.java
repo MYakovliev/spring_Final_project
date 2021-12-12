@@ -87,7 +87,7 @@ class UserValidatorTest {
 
     public static Stream<Arguments> provideValidName() {
         return Stream.of(
-                Arguments.of("Q"), Arguments.of("justName"), Arguments.of("Name"), Arguments.of("Царь"),
+                Arguments.of("Q"), Arguments.of("justName"), Arguments.of("name"), Arguments.of("Царь"),
                 Arguments.of("qwertyuiopqwertyuiopqwertyuiopqwert"));
     }
 

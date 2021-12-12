@@ -95,6 +95,7 @@ public class Bid {
         sb.append(", buyer=").append(buyer);
         sb.append(", bid=").append(bid);
         sb.append(", status=").append(status);
+        sb.append(", idLot=").append(idLot);
         sb.append('}');
         return sb.toString();
     }

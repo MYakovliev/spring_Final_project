@@ -11,6 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
+    <jsp:useBean id="now" class="java.util.Date"/>
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="locale.locale"/>
     <title><fmt:message key="lot.title"/></title>
@@ -21,12 +22,12 @@
 <div class="content_container">
     <jsp:useBean id="today" class="java.util.Date"/>
 
-    <c:if test="${!submitted}">
+    <c:if test="${!submitted && lot.finishTime le now}">
         <tag:access role="admin">
         <a class="submitbtn" href="/lot/${lot.id}/submit">&#10004;</a>
         </tag:access>
     </c:if>
-    <a href="/user/${lot.sellerId}">
+    <a href="/user/${lot.seller.id}">
         <fmt:message key="lot.to_seller"/>
     </a>
     <c:if test="${error ne null}">
@@ -42,8 +43,8 @@
         <input type="number" min="0.01" step="0.01" name="bid"/>
         <input type="submit" name="btn" value="<fmt:message key="lot.make_bid"/>"/>
     </form>
-    <c:if test="${lot.buyerId ne 0}">
-        <a href="/user/${lot.buyerId}">
+    <c:if test="${lot.buyer ne null}">
+        <a href="/user/${lot.buyer.id}">
             <fmt:message key="lot.to_buyer"/>
         </a>
     </c:if>

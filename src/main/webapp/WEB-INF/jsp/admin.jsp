@@ -20,10 +20,6 @@
     <button class="tablinks" onclick="openTab(event, 'Lots')"><fmt:message key="admin.lots"/></button>
 </div>
 <div id="Users" class="tabcontent">
-    <form action="/admin" method="get">
-        <input name="search_user" type="text" placeholder="<fmt:message key="search"/>" value="${search_user}"/>
-        <button type="submit">&hookleftarrow;</button>
-    </form>
     <table>
         <tr>
             <th><fmt:message key="admin.id"/></th>
@@ -96,10 +92,6 @@
 </div>
 
 <div id="Lots" class="tabcontent">
-    <form action="admin" method="get">
-        <input name="search" type="text" placeholder="<fmt:message key="search"/>" value="${search}"/>
-        <button type="submit">&hookleftarrow;</button>
-    </form>
     <table>
         <tr>
             <th><fmt:message key="admin.id"/></th>
@@ -119,14 +111,14 @@
                 <td>${lot.startTime}</td>
                 <td>${lot.finishTime}</td>
                 <td>${lot.currentCost}</td>
-                <td><a href="/user/${lot.sellerId}">
-                        ${lot.sellerId}</a></td>
+                <td><a href="/user/${lot.seller.id}">
+                        ${lot.seller.id}</a></td>
                 <td><c:choose>
-                    <c:when test="${lot.buyerId eq 0}">
+                    <c:when test="${lot.buyer eq null}">
                         ---
                     </c:when>
                     <c:otherwise>
-                        <a href="/user/${lot.buyerId}">${lot.buyerId}</a>
+                        <a href="/user/${lot.buyer.id}">${lot.buyer.id}</a>
                     </c:otherwise>
                 </c:choose>
                 </td>

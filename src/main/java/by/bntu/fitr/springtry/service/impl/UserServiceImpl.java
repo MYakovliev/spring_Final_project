@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         password = passwordEncoder.encode(password);
         User user = new User(0, name, mail, new BigDecimal("0.00"), role, null, false);
         if (isTaken(login)) {
-            throw new ServiceException(ErrorMessage.INVALID_LOGIN_OR_PASSWORD);
+            throw new ServiceException(ErrorMessage.LOGIN_ALREADY_TAKEN);
         }
         user.setLogin(login);
         user.setPassword(password);
@@ -184,6 +184,8 @@ public class UserServiceImpl implements UserService {
         newBid.setIdLot(lot.getId());
         final Bid saved = bidRepository.save(newBid);
         bidHistory.add(saved);
+        buyer.setBalance(buyer.getBalance().subtract(bid));
+        userRepository.save(buyer);
         final Lot savedLot = lotRepository.save(lot);
         savedLot.setBidHistory(bidHistory);
         return savedLot;

@@ -2,16 +2,17 @@ function readURL(input, imageId, inputId) {
     let image;
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-        image = document.getElementById(imageId)
-
+        image = document.getElementById(imageId);
         reader.addEventListener("load", function () {
             image.src = reader.result;
-            image.css("visibility", "visible")
+            image.style = "visibility:show";
         }, false);
 
         if (inputId != null) {
-            $('#' + inputId + 'Label').css('visibility', 'visible');
-            $('#' + inputId + 'Input').css('visibility', 'visible');
+            nextLabel = inputId + "Label";
+            nextInput = inputId + "Input";
+            document.getElementById(nextLabel).style = "visibility:show";
+            document.getElementById(nextInput).style ="visibility:show";
         }
 
         reader.readAsDataURL(input.files[0]);

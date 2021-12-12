@@ -6,7 +6,7 @@ import by.bntu.fitr.springtry.entity.Lot;
 import by.bntu.fitr.springtry.entity.User;
 import by.bntu.fitr.springtry.entity.UserRole;
 import by.bntu.fitr.springtry.service.LotService;
-import by.bntu.fitr.springtry.service.UserService;
+import by.bntu.fitr.springtry.service.ServiceException;
 import by.bntu.fitr.springtry.util.FileSaver;
 import by.bntu.fitr.springtry.util.JspPath;
 import by.bntu.fitr.springtry.util.RequestParameter;
@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Timestamp;
 import javax.servlet.http.HttpSession;
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class LotController {
     private static final Logger logger = LogManager.getLogger();
     private static final String DEFAULT_REDIRECT = "redirect:/main";
-    private static final int DEFAULT_AMOUNT = 20;
+    private static final int DEFAULT_AMOUNT = 5;
 
     @Autowired
     private LotService lotService;
@@ -84,14 +84,23 @@ public class LotController {
             if (session != null) {
                 User user = (User) session.getAttribute(SessionAttribute.USER);
                 if (user != null && user.getUserRole() == UserRole.SELLER) {
-                    List<MultipartFile> pictures = lotData.getPictures();
+                    List<MultipartFile> pictures = lotData.getImages();
+                    Timestamp startTime = null;
+                    Timestamp finishTime = null;
+                    String startTimeString = lotData.getStartTime();
+                    String finishTimeString = lotData.getFinishTime();
+                    if (!(startTimeString.isEmpty() || startTimeString.isBlank())) {
+                        startTime = Timestamp.valueOf(startTimeString.replace("T", " ") + ":00");
+                    }
+                    if (!(finishTimeString.isEmpty() || finishTimeString.isBlank())) {
+                        finishTime = Timestamp.valueOf(finishTimeString.replace("T", " ") + ":00");
+                    }
                     List<String> filePaths = uploadLotImages(pictures);
-                    Lot newLot = lotService.createNewLot(lotData.getName(), lotData.getDescription(), lotData.getStartBid(),
-                            lotData.getStartTime(), lotData.getFinishTime(), user, filePaths);
-
+                    lotService.createNewLot(lotData.getName(), lotData.getDescription(), lotData.getStartBid(),
+                            startTime, finishTime, user, filePaths);
                 }
             }
-        } catch (SecurityException e) {
+        } catch (ServiceException e) {
             modelAndView.setViewName(JspPath.LOT_EDIT);
             modelAndView.addObject(RequestParameter.ERROR, e.getMessage());
         }
@@ -117,7 +126,9 @@ public class LotController {
     public ModelAndView findLot(@PathVariable("id") long id, ModelAndView modelAndView) {
         modelAndView.setViewName(JspPath.LOT);
         Lot lot = lotService.findLotById(id);
+        logger.info("lot found:{}", lot);
         boolean submitted = lotService.isLotSubmitted(lot.getId());
+        logger.info("is lot submitted:{}", submitted);
         modelAndView.addObject(RequestParameter.SUBMITTED, submitted);
         modelAndView.addObject(RequestParameter.USER_LIST, lot.getBidHistory().stream().map(Bid::getBuyer).collect(Collectors.toList()));
         modelAndView.addObject(RequestParameter.LOT, lot);

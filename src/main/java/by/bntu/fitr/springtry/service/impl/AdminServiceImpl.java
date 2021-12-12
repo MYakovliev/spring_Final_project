@@ -4,6 +4,7 @@ import by.bntu.fitr.springtry.entity.Bid;
 import by.bntu.fitr.springtry.entity.Lot;
 import by.bntu.fitr.springtry.entity.Status;
 import by.bntu.fitr.springtry.entity.User;
+import by.bntu.fitr.springtry.repository.BidRepository;
 import by.bntu.fitr.springtry.repository.LotRepository;
 import by.bntu.fitr.springtry.repository.UserRepository;
 import by.bntu.fitr.springtry.service.AdminService;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,34 +27,37 @@ public class AdminServiceImpl implements AdminService {
     private UserRepository userRepository;
     @Autowired
     private LotRepository lotRepository;
+    @Autowired
+    private BidRepository bidRepository;
 
     @Override
-    public void ban(long userId) throws ServiceException {
+    public User ban(long userId) throws ServiceException {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ServiceException(ErrorMessage.UNKNOWN_USER)
         );
         user.setBanned(true);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public void unban(long userId) throws ServiceException {
+    public User unban(long userId) throws ServiceException {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ServiceException(ErrorMessage.UNKNOWN_USER)
         );
         user.setBanned(false);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public void submitWinner(Lot lot) throws ServiceException {
-        List<Bid> bidHistory = lot.getBidHistory();
+    public Lot submitWinner(Lot lot) throws ServiceException {
+        List<Bid> bidHistory = bidRepository.findByIdLot(lot.getId());
         Date finishTime = lot.getFinishTime();
-        if (!finishTime.after(new Date())){
+        if (!(finishTime.before(new Date()) || (bidHistory == null || bidHistory.isEmpty()))){
             throw new ServiceException(ErrorMessage.UNABLE_TO_SUBMIT);
         }
         bidHistory.forEach(bid -> {if (bid.getStatus()== Status.WINING) bid.setStatus(Status.WON);});
         lot.setBidHistory(bidHistory);
-        lotRepository.save(lot);
+        bidRepository.saveAll(bidHistory);
+        return lotRepository.save(lot);
     }
 }

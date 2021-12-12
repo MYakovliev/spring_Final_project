@@ -17,6 +17,7 @@ public class ErrorMessage {
     public static final String NOT_ENOUGH_MONEY = "not_enough_money";
     public static final String FAILED_TO_CREATE_LOT = "failed_to_create_lot";
     public static final String UNABLE_TO_SUBMIT = "unable_to_submit";
+    public static final String LOGIN_ALREADY_TAKEN = "login_already_taken";
 
     private ErrorMessage(){
     }

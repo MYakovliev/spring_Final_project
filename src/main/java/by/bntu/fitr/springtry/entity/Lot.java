@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Entity class Lot
@@ -30,7 +31,7 @@ public class Lot {
     private User seller;
     @Transient
     private List<Bid> bidHistory;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "lot_id")
     private List<LotImage> images;
 
@@ -98,8 +99,8 @@ public class Lot {
     }
 
     public BigDecimal getCurrentCost() {
-        Optional<Bid> any = bidHistory.stream().filter(bid -> bid.getStatus() == Status.WINING).findAny();
-        if (any.isPresent()){
+        Optional<Bid> any = bidHistory.stream().max(Comparator.comparing(Bid::getBid));
+        if (any.isPresent()) {
             return any.get().getBid();
         }
         return currentCost;
@@ -120,22 +121,18 @@ public class Lot {
     public User getBuyer() {
         User buyer = null;
         Optional<Bid> first = bidHistory.stream().sorted(Comparator.comparing(Bid::getBid)).findFirst();
-        if (first.isPresent()){
+        if (first.isPresent()) {
             buyer = first.get().getBuyer();
         }
         return buyer;
     }
 
     public List<String> getImages() {
-        List<String> imageList = new ArrayList<>();
-        images.forEach(lotImage -> imageList.add(lotImage.getImage()));
-        return imageList;
+        return images.stream().map(LotImage::getImage).collect(Collectors.toList());
     }
 
     public void setImages(List<String> images) {
-        List<LotImage> lotImages = new ArrayList<>();
-        images.forEach(image -> lotImages.add(new LotImage(0, image)));
-        this.images = lotImages;
+        this.images = images.stream().map(image -> new LotImage(0, image, id)).collect(Collectors.toList());
     }
 
     @Override

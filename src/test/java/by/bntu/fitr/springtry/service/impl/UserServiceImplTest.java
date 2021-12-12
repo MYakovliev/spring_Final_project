@@ -46,6 +46,7 @@ class UserServiceImplTest {
     @Test
     @DirtiesContext
     void makeBidPositive() {
+        user1.setPassword("$2a$12$swOvQiIkAIu8.OapWlPJkeRkwhEl9gZM60b8M9DKOAB7fI3Sm4Kxa");
         Lot lotById = lotService.findLotById(1);
         user1.setBalance(new BigDecimal("40"));
         Lot lot = userService.makeBid(user1, "30.01", lotById);
@@ -53,13 +54,11 @@ class UserServiceImplTest {
         assertEquals(new BigDecimal("30.01"), currentCost);
     }
 
-//todo add parametrized
     @Test
     @DirtiesContext
     void makeBidNegative() {
         Lot lotById = lotService.findLotById(1);
         user1.setBalance(new BigDecimal("40"));
-        userService.makeBid(user1, "30.01", lotById);
         assertThrows(ServiceException.class, () -> userService.makeBid(user1, "p", lotById));
     }
 
@@ -135,7 +134,7 @@ class UserServiceImplTest {
 
     @Test
     @DirtiesContext
-    void addBalancePositive() {
+    void addBalancePositiveBuyer() {
         User expected = new User(1, "name1", "mail1@mail.ma", new BigDecimal("12.01"), UserRole.BUYER,
                 "/img/default_image.png", false, "login1");
         User actual = userService.addBalance(1, "12.01");

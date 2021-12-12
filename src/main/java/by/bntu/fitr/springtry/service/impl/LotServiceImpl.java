@@ -1,9 +1,6 @@
 package by.bntu.fitr.springtry.service.impl;
 
-import by.bntu.fitr.springtry.entity.Bid;
-import by.bntu.fitr.springtry.entity.Lot;
-import by.bntu.fitr.springtry.entity.Status;
-import by.bntu.fitr.springtry.entity.User;
+import by.bntu.fitr.springtry.entity.*;
 import by.bntu.fitr.springtry.repository.BidRepository;
 import by.bntu.fitr.springtry.repository.LotRepository;
 import by.bntu.fitr.springtry.service.LotService;
@@ -16,11 +13,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +31,7 @@ public class LotServiceImpl implements LotService {
     @Autowired
     private BidRepository bidRepository;
 
+
     @Override
     public Lot createNewLot(String name, String description, String startBid, Timestamp startTime, Timestamp finishTime,
                             User seller, List<String> images) {
@@ -46,10 +44,10 @@ public class LotServiceImpl implements LotService {
             startTime = new Timestamp(System.currentTimeMillis());
         }
         BigDecimal startBidDecimal = new BigDecimal(startBid);
-
-        Lot lot = new Lot(0, name, description, startTime, finishTime, startBidDecimal, seller, images);
+        Lot lot = new Lot(0, name, description, startTime, finishTime, startBidDecimal, seller, new ArrayList<>());
         lot = lotRepository.save(lot);
-        return lot;
+        lot.setImages(images);
+        return lotRepository.save(lot);
     }
 
     @Override

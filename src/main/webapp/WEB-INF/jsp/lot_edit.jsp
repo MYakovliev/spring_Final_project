@@ -19,21 +19,26 @@
           rel="stylesheet"/>
     <link href="<c:url value="/css/lot_edit.css"/>" type="text/css"
           rel="stylesheet"/>
+    <script src="<c:url value="/js/open_images.js"/>"></script>
+
     <title><fmt:message key="lot_edit.title"/></title>
 </head>
 <body>
 <form class="container" action="/new_lot" method="post" enctype="multipart/form-data">
+    <c:if test="${error ne null}">
+        <p class="error"><fmt:message key="${error}"/></p>
+    </c:if>
     <input type="hidden" name="command" value="add_lot"/>
     <input type="text" name="name" value="${lot.name}" title="<fmt:message key="lot_edit.name_title"/>" placeholder="<fmt:message key="lot_edit.name"/>" required pattern="[-=:'\.)\s(\wА-Яа-я0-9]{4,45}"/>
     <br/>
     <textarea name="description" placeholder="<fmt:message key="lot_edit.description"/>">${lot.description}</textarea>
     <br/>
-    <input type="number" min="0.01" step="0.01" name="bid" value="${lot.currentCost}" placeholder="<fmt:message key="lot_edit.start_bid"/>"/>
+    <input type="number" min="0.01" step="0.01" name="startBid" value="${lot.currentCost}" placeholder="<fmt:message key="lot_edit.start_bid"/>"/>
     <br/>
     <label for="endTime"><fmt:message key="lot_edit.start_time"/></label>
     <input id="startTime" type="datetime-local" value="${lot.startTime}" name="startTime" title="<fmt:message key="lot_edit.start_time_title"/>"/>
     <label for="endTime"><fmt:message key="lot_edit.finish_time"/></label>
-    <input id="endTime" type="datetime-local" value="${lot.finishTime}" name="endTime" title="<fmt:message key="lot_edit.finish_time_title"/>"/>
+    <input id="endTime" type="datetime-local" value="${lot.finishTime}" name="finishTime" title="<fmt:message key="lot_edit.finish_time_title"/>"/>
     <br/>
     <img src="${lot.images.get(0)}" alt="image" id="image_path1Image" style="visibility: hidden"/>
     <img id="image_path2Image" src="${lot.images.get(1)}" style="visibility: hidden"/>
@@ -42,19 +47,19 @@
     <img id="image_path5Image" src="${lot.images.get(4)}" style="visibility: hidden"/>
     <br/>
     <label for="1"><fmt:message key="lot_edit.upload_picture"/></label>
-    <input id="1" type="file" name="image_path1Input" required
+    <input id="1" type="file" name="imagePath1" required
            onchange="readURL(this, 'image_path1Image', 'image_path2')"/>
     <label id="image_path2Label" style="visibility: hidden" for="image_path2Input"><fmt:message key="lot_edit.upload_picture"/></label>
-    <input type="file" id="image_path2Input" name="image_path2" style="visibility: hidden"
+    <input type="file" id="image_path2Input" name="imagePath2" style="visibility: hidden"
            onchange="readURL(this, 'image_path2Image', 'image_path3')"/>
     <label id="image_path3Label" style="visibility: hidden" for="image_path3Input"><fmt:message key="lot_edit.upload_picture"/></label>
-    <input type="file" name="image_path3" id="image_path3Input" style="visibility: hidden"
+    <input type="file" name="imagePath3" id="image_path3Input" style="visibility: hidden"
            onchange="readURL(this, 'image_path3Image', 'image_path4')"/>
     <label id="image_path4Label" style="visibility: hidden" for="image_path4Input"><fmt:message key="lot_edit.upload_picture"/></label>
-    <input type="file" name="image_path4" style="visibility: hidden" id="image_path4Input"
+    <input type="file" name="imagePath4" style="visibility: hidden" id="image_path4Input"
            onchange="readURL(this, 'image_path4Image', 'image_path5')"/>
     <label id="image_path5Label" style="visibility: hidden" for="image_path5Input"><fmt:message key="lot_edit.upload_picture"/></label>
-    <input type="file" name="image_path5" style="visibility: hidden" id="image_path5Input"
+    <input type="file" name="imagePath5" style="visibility: hidden" id="image_path5Input"
            onchange="readURL(this, 'image_path5Image', null)"/>
     <br/>
     <input type="submit" name="btn" value="<fmt:message key="lot_edit.submit"/>"/>
@@ -62,6 +67,5 @@
         <fmt:message key="login.back_to_main"/></a>
     </p>
 </form>
-<script src="<c:url value="/js/open_images.js"/>"></script>
 </body>
 </html>

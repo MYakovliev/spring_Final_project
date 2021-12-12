@@ -10,13 +10,24 @@ public class LotImage {
     @Column(name = "idlot_images")
     private long id;
     private String image;
+    @Column(name="lot_id")
+    private long lotId;
 
-    public LotImage(long id, String image) {
+    public LotImage(long id, String image, long lotId) {
         this.id = id;
         this.image = image;
+        this.lotId = lotId;
     }
 
     public LotImage() {
+    }
+
+    public long getLotId() {
+        return lotId;
+    }
+
+    public void setLotId(long lotId) {
+        this.lotId = lotId;
     }
 
     public long getId() {

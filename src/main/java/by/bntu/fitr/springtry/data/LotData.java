@@ -1,24 +1,64 @@
 package by.bntu.fitr.springtry.data;
 
 import org.springframework.web.multipart.MultipartFile;
-
+import java.util.Arrays;
 import java.sql.Timestamp;
 import java.util.List;
 
 public class LotData {
-    private List<MultipartFile> pictures;
+    private MultipartFile imagePath1;
+    private MultipartFile imagePath2;
+    private MultipartFile imagePath3;
+    private MultipartFile imagePath4;
+    private MultipartFile imagePath5;
     private String name;
     private String description;
     private String startBid;
-    private Timestamp startTime;
-    private Timestamp finishTime;
+    private String startTime;
+    private String finishTime;
 
-    public List<MultipartFile> getPictures() {
-        return pictures;
+    public List<MultipartFile> getImages() {
+        return Arrays.asList(imagePath1, imagePath2, imagePath3, imagePath4, imagePath5);
     }
 
-    public void setPictures(List<MultipartFile> pictures) {
-        this.pictures = pictures;
+    public MultipartFile getImagePath1() {
+        return imagePath1;
+    }
+
+    public void setImagePath1(MultipartFile imagePath1) {
+        this.imagePath1 = imagePath1;
+    }
+
+    public MultipartFile getImagePath2() {
+        return imagePath2;
+    }
+
+    public void setImagePath2(MultipartFile imagePath2) {
+        this.imagePath2 = imagePath2;
+    }
+
+    public MultipartFile getImagePath3() {
+        return imagePath3;
+    }
+
+    public void setImagePath3(MultipartFile imagePath3) {
+        this.imagePath3 = imagePath3;
+    }
+
+    public MultipartFile getImagePath4() {
+        return imagePath4;
+    }
+
+    public void setImagePath4(MultipartFile imagePath4) {
+        this.imagePath4 = imagePath4;
+    }
+
+    public MultipartFile getImagePath5() {
+        return imagePath5;
+    }
+
+    public void setImagePath5(MultipartFile imagePath5) {
+        this.imagePath5 = imagePath5;
     }
 
     public String getName() {
@@ -45,19 +85,19 @@ public class LotData {
         this.startBid = startBid;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getFinishTime() {
+    public String getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Timestamp finishTime) {
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
 }

@@ -2,6 +2,7 @@ package by.bntu.fitr.springtry.service;
 
 
 import by.bntu.fitr.springtry.entity.Lot;
+import by.bntu.fitr.springtry.entity.User;
 
 /**
  * The interface provides action for admin service
@@ -14,7 +15,7 @@ public interface AdminService {
      * @param userId
      * @throws ServiceException
      */
-    void ban(long userId) throws ServiceException;
+    User ban(long userId) throws ServiceException;
 
     /**
      * Method to unban user
@@ -22,7 +23,7 @@ public interface AdminService {
      * @param userId
      * @throws ServiceException
      */
-    void unban(long userId) throws ServiceException;
+    User unban(long userId) throws ServiceException;
 
     /**
      * Method to submit that lot has been submitted
@@ -30,5 +31,5 @@ public interface AdminService {
      * @param lot
      * @throws ServiceException
      */
-    void submitWinner(Lot lot) throws ServiceException;
+    Lot submitWinner(Lot lot) throws ServiceException;
 }
